@@ -266,10 +266,6 @@
 
 <script>
 
-// ============================================================
-// KONFIGURACIJSKA SEKCIJA — TUKAJ DOPOLNI VSEBINO
-// ============================================================
-
 // --- BESEDILO 1 ---
 const BESEDILO1_ODSTAVKI = [
   "To je prvi odstavek besedila 1. Vstavi svojo vsebino sem. Besedilo je lahko poljubno dolgo in bo prikazano na sredini zaslona.",
@@ -288,10 +284,6 @@ const BESEDILO2_ODSTAVKI = [
 ];
 
 // --- REKLAME ---
-// Reklame tečejo vzporedno z odstavki — ena naenkrat, levo in desno neodvisno:
-//   odstavek 1 → l1 + d1
-//   odstavek 2 → l2 + d2
-//   odstavek 6 → l1 + d1  (zanka od začetka, ko zmanjka)
 const REKLAME_LEVO = [
   "reklame/reklama_l1.mp4",
   "reklame/reklama_l2.mp4",
@@ -307,7 +299,7 @@ const REKLAME_DESNO = [
   "reklame/reklama_d5.mp4",
 ];
 
-// --- VPRAŠALNIK 1 (za besedilo 1) ---
+// VPRAŠALNIK 1
 // pravilna: 0=a, 1=b, 2=c, 3=d
 const VPRASALNIK1 = [
   { vprasanje: "Vprašanje 1 o besedilu 1?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 0 },
@@ -322,7 +314,7 @@ const VPRASALNIK1 = [
   { vprasanje: "Vprašanje 10 o besedilu 1?", moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 1 },
 ];
 
-// --- VPRAŠALNIK 2 (za besedilo 2) ---
+// VPRAŠALNIK 2
 const VPRASALNIK2 = [
   { vprasanje: "Vprašanje 1 o besedilu 2?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 0 },
   { vprasanje: "Vprašanje 2 o besedilu 2?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 1 },
@@ -339,10 +331,7 @@ const VPRASALNIK2 = [
 // --- Pipedream URL ---
 const PIPEDREAM_URL = "https://eodl32fjtfefsf6.m.pipedream.net";
 
-// ============================================================
 // POMOŽNE FUNKCIJE
-// ============================================================
-
 function preberiSkupino() {
   const sk = parseInt(new URLSearchParams(window.location.search).get("skupina"));
   return [1, 2, 3, 4].includes(sk) ? sk : null;
@@ -356,7 +345,7 @@ function shraniRezultate(podatki) {
   });
 }
 
-// Vrne HTML za eno reklamo — indeks teče vzporedno z odstavki, zanka čez seznam
+// Vrne HTML za eno reklamo
 function reklamaHTML(stran, odstavekIndex) {
   const reklame = stran === "levo" ? REKLAME_LEVO : REKLAME_DESNO;
   if (!reklame || reklame.length === 0) return "<div></div>";
@@ -367,7 +356,7 @@ function reklamaHTML(stran, odstavekIndex) {
   </div>`;
 }
 
-// Blokira tipke za nazaj (←, Backspace, Alt+←)
+// Blokira tipke za nazaj
 function blokirajNazaj(e) {
   if (e.key === "Backspace" || e.key === "ArrowLeft" || (e.altKey && e.key === "ArrowLeft")) {
     e.preventDefault();
@@ -375,10 +364,7 @@ function blokirajNazaj(e) {
   }
 }
 
-// ============================================================
-// GRADNIKI EKSPERIMENTA
-// ============================================================
-
+// GRADNIKI
 function uvodniZaslon() {
   return {
     type: jsPsychHtmlButtonResponse,
@@ -527,13 +513,11 @@ function zakljucekZaslon() {
   };
 }
 
-// ============================================================
-// SPOREDNI NAČRT
-// ============================================================
-// Skupina 1: B1 (brez reklam) → V1 → B2 (z reklamami) → V2
-// Skupina 2: B1 (z reklamami) → V1 → B2 (brez reklam) → V2
-// Skupina 3: B2 (brez reklam) → V2 → B1 (z reklamami) → V1
-// Skupina 4: B2 (z reklamami) → V2 → B1 (brez reklam) → V1
+// NAČRT SKUPIN (vsi imajo V1 po B1 in V2 po B2)
+  // Skupina 1: B1, B2 (reklame)
+  // Skupina 2: B1 (reklame), B2
+  // Skupina 3: B2, B1 (reklame)
+  // Skupina 4: B2 (reklame), B1
 
 function sestaviSpored(skupina) {
   switch (skupina) {
@@ -568,10 +552,7 @@ function sestaviSpored(skupina) {
   }
 }
 
-// ============================================================
 // ZAGON
-// ============================================================
-
 const skupina = preberiSkupino();
 
 if (!skupina) {
