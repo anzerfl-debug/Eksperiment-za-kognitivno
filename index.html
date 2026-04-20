@@ -67,7 +67,7 @@
 
     /* ── Demografski obrazec ── */
     .demo-form {
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
       padding: 48px 32px;
       text-align: left;
@@ -103,6 +103,64 @@
     .demo-form input:focus,
     .demo-form select:focus { outline: none; border-color: var(--accent); }
 
+    /* ── Drsnik ── */
+    .drsnik-skupina {
+      margin-top: 20px;
+    }
+    .drsnik-skupina .drsnik-vprasanje {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-col);
+      margin-bottom: 16px;
+    }
+    .drsnik-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drsnik-wrapper input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+      height: 6px;
+    }
+    .drsnik-oznake {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .drsnik-vrednost {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+
+    /* ── Samostojni zaslon z drsnikom (za zahtevnost) ── */
+    .zaslon-drsnik {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 60px 32px;
+      text-align: center;
+    }
+    .zaslon-drsnik h2 {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .zaslon-drsnik p {
+      font-size: 1.05rem;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .zaslon-drsnik .drsnik-wrapper {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
     /* ── Branje besedila ── */
     .branje-wrapper {
       display: grid;
@@ -123,27 +181,12 @@
       max-width: 760px;
       width: 100%;
     }
-    .branje-besedilo .naslov-besedila {
-      font-family: 'Lora', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 32px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--border);
-    }
     .branje-besedilo .odstavek-tekst {
       text-align: center;
       font-family: 'Lora', serif;
       font-size: 1.15rem;
       line-height: 1.9;
       color: #2c2c2c;
-    }
-    .branje-besedilo .stevec-odstavkov {
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-align: right;
-      margin-top: 20px;
-      font-style: italic;
     }
     .navodilo-nadaljevanja {
       position: fixed;
@@ -236,7 +279,7 @@
       font-weight: 600;
       letter-spacing: 0.04em;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s;
       display: inline-block;
       margin-top: 32px;
     }
@@ -258,7 +301,7 @@
       text-align: center;
     }
     .zakljucek h1 { font-family: 'Lora', serif; font-size: 2rem; margin-bottom: 20px; }
-    .zakljucek p { font-size: 1.05rem; color: #444; line-height: 1.8; }
+    .zakljucek p { font-size: 1.05rem; color: #444; line-height: 1.8; margin-bottom: 12px; }
   </style>
 </head>
 
@@ -266,24 +309,26 @@
 
 <script>
 
-// --- BESEDILO 1 ---
+// ============================================================
+// KONFIGURACIJSKA SEKCIJA — TUKAJ DOPOLNI VSEBINO
+// ============================================================
+
 const BESEDILO1_ODSTAVKI = [
-  "To je prvi odstavek besedila 1. Vstavi svojo vsebino sem. Besedilo je lahko poljubno dolgo in bo prikazano na sredini zaslona.",
-  "To je drugi odstavek besedila 1. Udeleženec bo prišel sem po pritisku na preslednico ali puščico desno.",
-  "To je tretji odstavek besedila 1. Reklame na straneh se ob vsakem odstavku zamenjajo z naslednjo v vrsti.",
-  "To je četrti odstavek besedila 1. Ko zmanjka reklam, se seznam začne znova od začetka.",
-  "To je peti odstavek besedila 1. Po zadnjem odstavku sledi vprašalnik.",
+  "",
+  "",
+  "",
+  "",
+  "",
 ];
 
 const BESEDILO2_ODSTAVKI = [
-  "To je prvi odstavek besedila 2. Vstavi svojo vsebino sem.",
-  "To je drugi odstavek besedila 2. Besedilo napreduje s tipkami.",
-  "To je tretji odstavek besedila 2. Reklame se prikazujejo vzporedno z odstavki.",
-  "To je četrti odstavek besedila 2. Ko zmanjka reklam, se seznam začne znova od začetka.",
-  "To je peti odstavek besedila 2. Po zadnjem odstavku sledi vprašalnik.",
+  "",
+  "",
+  "",
+  "",
+  "",
 ];
 
-// --- REKLAME ---
 const REKLAME_LEVO = [
   "reklame/reklama_l1.mp4",
   "reklame/reklama_l2.mp4",
@@ -299,7 +344,6 @@ const REKLAME_DESNO = [
   "reklame/reklama_d5.mp4",
 ];
 
-// VPRAŠALNIK 1
 // pravilna: 0=a, 1=b, 2=c, 3=d
 const VPRASALNIK1 = [
   { vprasanje: "Vprašanje 1 o besedilu 1?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 0 },
@@ -314,7 +358,6 @@ const VPRASALNIK1 = [
   { vprasanje: "Vprašanje 10 o besedilu 1?", moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 1 },
 ];
 
-// VPRAŠALNIK 2
 const VPRASALNIK2 = [
   { vprasanje: "Vprašanje 1 o besedilu 2?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 0 },
   { vprasanje: "Vprašanje 2 o besedilu 2?",  moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 1 },
@@ -328,10 +371,12 @@ const VPRASALNIK2 = [
   { vprasanje: "Vprašanje 10 o besedilu 2?", moznosti: ["Odgovor a", "Odgovor b", "Odgovor c", "Odgovor d"], pravilna: 1 },
 ];
 
-// --- Pipedream URL ---
 const PIPEDREAM_URL = "https://eodl32fjtfefsf6.m.pipedream.net";
 
+// ============================================================
 // POMOŽNE FUNKCIJE
+// ============================================================
+
 function preberiSkupino() {
   const sk = parseInt(new URLSearchParams(window.location.search).get("skupina"));
   return [1, 2, 3, 4].includes(sk) ? sk : null;
@@ -345,18 +390,16 @@ function shraniRezultate(podatki) {
   });
 }
 
-// Vrne HTML za eno reklamo
 function reklamaHTML(stran, odstavekIndex) {
   const reklame = stran === "levo" ? REKLAME_LEVO : REKLAME_DESNO;
   if (!reklame || reklame.length === 0) return "<div></div>";
-  const pot = reklame[odstavekIndex];
+  const pot = reklame[odstavekIndex % reklame.length];
   if (!pot) return "<div></div>";
   return `<div class="reklama-stran">
     <video src="${pot}" autoplay loop muted playsinline></video>
   </div>`;
 }
 
-// Blokira tipke za nazaj
 function blokirajNazaj(e) {
   if (e.key === "Backspace" || e.key === "ArrowLeft" || (e.altKey && e.key === "ArrowLeft")) {
     e.preventDefault();
@@ -364,7 +407,20 @@ function blokirajNazaj(e) {
   }
 }
 
-// GRADNIKI
+// Pomočnik: doda live prikaz vrednosti drsnika
+function aktivirajDrsnik(id, prikazId) {
+  const drsnik = document.getElementById(id);
+  const prikaz = document.getElementById(prikazId);
+  if (drsnik && prikaz) {
+    prikaz.textContent = drsnik.value;
+    drsnik.addEventListener("input", () => { prikaz.textContent = drsnik.value; });
+  }
+}
+
+// ============================================================
+// GRADNIKI EKSPERIMENTA
+// ============================================================
+
 function uvodniZaslon() {
   return {
     type: jsPsychHtmlButtonResponse,
@@ -386,8 +442,10 @@ function demografskiVprasalnik() {
     html: `
       <div class="demo-form">
         <h2>Osnovni podatki</h2>
+
         <label for="starost">Starost</label>
         <input type="number" id="starost" name="starost" min="6" max="100" required placeholder="npr. 19">
+
         <label for="spol">Spol</label>
         <select id="spol" name="spol" required>
           <option value="">— izberi —</option>
@@ -395,10 +453,30 @@ function demografskiVprasalnik() {
           <option value="Z">Ženski</option>
           <option value="D">Drugo / ne želim povedati</option>
         </select>
+
+        <div class="drsnik-skupina">
+          <div class="drsnik-vprasanje">
+            Kako bi ocenili svoje kuharske izkušnje?
+            <em style="display:block; font-size:0.88rem; color:var(--muted); font-style:normal; margin-top:4px;">
+              Ocenite na lestvici od 1 (brez izkušenj) do 10 (odlični kuhar/ica).
+            </em>
+          </div>
+          <div class="drsnik-wrapper">
+            <input type="range" id="kuhanje" name="kuhanje" min="1" max="10" value="5">
+            <div class="drsnik-oznake">
+              <span>1 – brez izkušenj</span>
+              <span>10 – odlični kuhar/ica</span>
+            </div>
+            <div class="drsnik-vrednost" id="kuhanje-vrednost">5</div>
+          </div>
+        </div>
       </div>`,
     button_label: "Naprej",
     button_html: `<button class="btn-glavni btn-fiksiran">%choice%</button>`,
-    data: { tip: "demografija" }   // oznaka za zanesljivo iskanje v on_finish
+    data: { tip: "demografija" },
+    on_load: function() {
+      aktivirajDrsnik("kuhanje", "kuhanje-vrednost");
+    }
   };
 }
 
@@ -410,7 +488,6 @@ function branjeTrials(odstavki, zReklamami) {
         ${zReklamami ? reklamaHTML("levo", i) : ""}
         <div class="branje-besedilo">
           <div class="odstavek-tekst">${odstavek}</div>
-          <div class="stevec-odstavkov">Odstavek ${i + 1} od ${odstavki.length}</div>
         </div>
         ${zReklamami ? reklamaHTML("desno", i) : ""}
       </div>
@@ -437,13 +514,11 @@ function branjeTrials(odstavki, zReklamami) {
 function vprasalnikTrials(vprasanja, stevilka) {
   return vprasanja.map((v, i) => ({
     type: jsPsychSurveyHtmlForm,
-
     html: `
       <div class="vprasalnik-wrapper">
         <h2>Vprašanja o besedilu ${stevilka}</h2>
         <div class="st-vprasanja">Vprašanje ${i + 1} od ${vprasanja.length}</div>
         <div class="vprasanje-tekst">${v.vprasanje}</div>
-
         <ul class="moznosti-lista">
           ${v.moznosti.map((m, mi) => `
             <li>
@@ -454,36 +529,64 @@ function vprasalnikTrials(vprasanja, stevilka) {
             </li>
           `).join("")}
         </ul>
-      </div>
-    `,
-
+      </div>`,
     button_label: "Naprej",
     button_html: `<button class="btn-glavni btn-fiksiran">%choice%</button>`,
-
     data: {
       tip: "vprasanje",
       vprasalnik_st: stevilka,
       vprasanje_st: i + 1,
       pravilna_moznost: v.pravilna
     },
-
     on_finish: function(data) {
       let odgovor = null;
-
       try {
         const parsed = typeof data.response === "string"
-          ? JSON.parse(data.response)
-          : data.response;
-
+          ? JSON.parse(data.response) : data.response;
         odgovor = parsed?.odg ?? null;
-      } catch (e) {
-        odgovor = null;
-      }
-
+      } catch (e) { odgovor = null; }
       data.izbrani_odgovor = odgovor !== null ? parseInt(odgovor) : null;
       data.pravilno = data.izbrani_odgovor === data.pravilna_moznost;
     }
   }));
+}
+
+// Vprašanje o zahtevnosti besedila (drsnik 1–10)
+function zahtevnostTrial(stevilkaBesedila) {
+  return {
+    type: jsPsychSurveyHtmlForm,
+    html: `
+      <div class="zaslon-drsnik">
+        <h2>Zahtevnost besedila</h2>
+        <p>
+          Kako zahtevno se vam je zdelo besedilo ${stevilkaBesedila}?<br>
+          <em style="font-size:0.9rem; color:var(--muted); font-style:normal;">
+            Ocenite na lestvici od 1 (zelo enostavno) do 10 (zelo zahtevno).
+          </em>
+        </p>
+        <div class="drsnik-wrapper">
+          <input type="range" id="zahtevnost" name="zahtevnost_b${stevilkaBesedila}" min="1" max="10" value="5">
+          <div class="drsnik-oznake">
+            <span>1 – zelo enostavno</span>
+            <span>10 – zelo zahtevno</span>
+          </div>
+          <div class="drsnik-vrednost" id="zahtevnost-vrednost">5</div>
+        </div>
+      </div>`,
+    button_label: "Naprej",
+    button_html: `<button class="btn-glavni btn-fiksiran">%choice%</button>`,
+    data: { tip: "zahtevnost", besedilo_st: stevilkaBesedila },
+    on_load: function() {
+      aktivirajDrsnik("zahtevnost", "zahtevnost-vrednost");
+    },
+    on_finish: function(data) {
+      try {
+        const parsed = typeof data.response === "string"
+          ? JSON.parse(data.response) : data.response;
+        data.zahtevnost_ocena = parseInt(parsed?.[`zahtevnost_b${stevilkaBesedila}`] ?? 5);
+      } catch(e) { data.zahtevnost_ocena = null; }
+    }
+  };
 }
 
 function vmesniZaslon() {
@@ -507,52 +610,70 @@ function zakljucekZaslon() {
       <div class="zakljucek">
         <h1>Hvala za sodelovanje!</h1>
         <p>Eksperiment je zaključen. Vaši odgovori so bili uspešno zabeleženi.</p>
+        <p style="color:var(--muted); font-size:0.95rem;">Zdaj lahko zaprete to okno ali zavihek.</p>
       </div>`,
-    choices: ["Zapri"],
-    button_html: `<button class="btn-glavni">%choice%</button>`
+    choices: ["Zapri okno"],
+    button_html: `<button class="btn-glavni">%choice%</button>`,
+    on_finish: function() {
+      // Poskusi zapreti okno (deluje le če je bilo odprto programsko)
+      window.close();
+    }
   };
 }
 
-// NAČRT SKUPIN (vsi imajo V1 po B1 in V2 po B2)
-  // Skupina 1: B1, B2 (reklame)
-  // Skupina 2: B1 (reklame), B2
-  // Skupina 3: B2, B1 (reklame)
-  // Skupina 4: B2 (reklame), B1
+// ============================================================
+// SPOREDNI NAČRT
+// ============================================================
+// Skupina 1: B1 (brez) → V1 → zahtevnost B1 → B2 (z reklamami) → V2 → zahtevnost B2
+// Skupina 2: B1 (z)    → V1 → zahtevnost B1 → B2 (brez)        → V2 → zahtevnost B2
+// Skupina 3: B2 (brez) → V2 → zahtevnost B2 → B1 (z reklamami) → V1 → zahtevnost B1
+// Skupina 4: B2 (z)    → V2 → zahtevnost B2 → B1 (brez)        → V1 → zahtevnost B1
 
 function sestaviSpored(skupina) {
   switch (skupina) {
     case 1: return [
       ...branjeTrials(BESEDILO1_ODSTAVKI, false),
       ...vprasalnikTrials(VPRASALNIK1, 1),
+      zahtevnostTrial(1),
       vmesniZaslon(),
       ...branjeTrials(BESEDILO2_ODSTAVKI, true),
       ...vprasalnikTrials(VPRASALNIK2, 2),
+      zahtevnostTrial(2),
     ];
     case 2: return [
       ...branjeTrials(BESEDILO1_ODSTAVKI, true),
       ...vprasalnikTrials(VPRASALNIK1, 1),
+      zahtevnostTrial(1),
       vmesniZaslon(),
       ...branjeTrials(BESEDILO2_ODSTAVKI, false),
       ...vprasalnikTrials(VPRASALNIK2, 2),
+      zahtevnostTrial(2),
     ];
     case 3: return [
       ...branjeTrials(BESEDILO2_ODSTAVKI, false),
       ...vprasalnikTrials(VPRASALNIK2, 2),
+      zahtevnostTrial(2),
       vmesniZaslon(),
       ...branjeTrials(BESEDILO1_ODSTAVKI, true),
       ...vprasalnikTrials(VPRASALNIK1, 1),
+      zahtevnostTrial(1),
     ];
     case 4: return [
       ...branjeTrials(BESEDILO2_ODSTAVKI, true),
       ...vprasalnikTrials(VPRASALNIK2, 2),
+      zahtevnostTrial(2),
       vmesniZaslon(),
       ...branjeTrials(BESEDILO1_ODSTAVKI, false),
       ...vprasalnikTrials(VPRASALNIK1, 1),
+      zahtevnostTrial(1),
     ];
   }
 }
 
+// ============================================================
 // ZAGON
+// ============================================================
+
 const skupina = preberiSkupino();
 
 if (!skupina) {
@@ -572,19 +693,25 @@ if (!skupina) {
     on_finish: function() {
       const vsiPodatki = jsPsych.data.get();
 
-      // Demografske podatke iščemo po oznaki "demografija" — zanesljivo
-      const demoTrial = vsiPodatki.filter({ tip: "demografija" }).values()[0];
-      const starost   = demoTrial?.response?.starost ?? "";
-      const spol      = demoTrial?.response?.spol    ?? "";
+      const demoTrial  = vsiPodatki.filter({ tip: "demografija" }).values()[0];
+      const starost    = demoTrial?.response?.starost  ?? "";
+      const spol       = demoTrial?.response?.spol     ?? "";
+      const kuhanje    = demoTrial?.response?.kuhanje  ?? "";
 
-      const odgovori = vsiPodatki.filter({ tip: "vprasanje" }).values();
-      const branje   = vsiPodatki.filter({ tip: "branje" }).values();
+      const odgovori   = vsiPodatki.filter({ tip: "vprasanje" }).values();
+      const branje     = vsiPodatki.filter({ tip: "branje" }).values();
+      const zahtevnost = vsiPodatki.filter({ tip: "zahtevnost" }).values();
 
       const payload = {
-        cas_oddaje:  new Date().toISOString(),
-        skupina:     skupina,
-        starost:     starost,
-        spol:        spol,
+        cas_oddaje: new Date().toISOString(),
+        skupina:    skupina,
+        starost:    starost,
+        spol:       spol,
+        kuhanje:    kuhanje,
+        zahtevnost_besedil: zahtevnost.map(t => ({
+          besedilo:  t.besedilo_st,
+          ocena:     t.zahtevnost_ocena
+        })),
         odgovori: odgovori.map(t => ({
           vprasalnik: t.vprasalnik_st,
           vprasanje:  t.vprasanje_st,
