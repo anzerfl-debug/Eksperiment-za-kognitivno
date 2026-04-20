@@ -627,7 +627,7 @@ function zakljucekZaslon() {
     button_html: `<button class="btn-glavni">%choice%</button>`,
     on_finish: function() {
       // Kratka zakasnitev da se fetch zaključi preden se okno zapre
-      // setTimeout(() => window.close(), 800);
+      setTimeout(() => window.close(), 800);
     }
   };
 }
