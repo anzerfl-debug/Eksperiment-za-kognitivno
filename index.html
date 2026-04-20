@@ -371,7 +371,7 @@ const VPRASALNIK2 = [
   { vprasanje: "Koliko časa traja celoten postopek priprave jedi po navodilih v receptu?", moznosti: ["49 minut", "46 minut", "55 minut", "62 minut"], pravilna: 1 },
 ];
 
-const PIPEDREAM_URL = "https://eoc0ml8e2u0k4cl.m.pipedream.net";
+const PIPEDREAM_URL = "https://eodl32fjtfefsf6.m.pipedream.net";
 
 // ============================================================
 // POMOŽNE FUNKCIJE
@@ -382,12 +382,17 @@ function preberiSkupino() {
   return [1, 2, 3, 4].includes(sk) ? sk : null;
 }
 
-function shraniRezultate(podatki) {
-  fetch(PIPEDREAM_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(podatki)
-  });
+async function shraniRezultate(podatki) {
+  try {
+    await fetch(PIPEDREAM_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(podatki)
+    });
+    console.log("Podatki uspešno poslani.");
+  } catch (e) {
+    console.error("Napaka pri pošiljanju:", e);
+  }
 }
 
 function reklamaHTML(stran, odstavekIndex) {
@@ -616,12 +621,14 @@ function zakljucekZaslon() {
     stimulus: `
       <div class="zakljucek">
         <h1>Hvala za sodelovanje!</h1>
-        <p>Eksperiment je zaključen. Vaši odgovori so bili uspešno zabeleženi.</p>
-        <p style="color:var(--muted); font-size:0.95rem;">Zdaj lahko zaprete to okno ali zavihek.</p>
+        <p>Eksperiment je zaključen</p>
       </div>`,
-    choices: ["Zapri okno"],
+    choices: ["Shranite podatke"],
     button_html: `<button class="btn-glavni">%choice%</button>`,
-    on_finish: function() { window.close(); }
+    on_finish: function() {
+      // Kratka zakasnitev da se fetch zaključi preden se okno zapre
+      setTimeout(() => window.close(), 800);
+    }
   };
 }
 
@@ -694,10 +701,10 @@ if (!skupina) {
     </div>`;
 } else {
   const jsPsych = initJsPsych({
-    on_finish: function() {
+    on_finish: async function() {
       const vsiPodatki = jsPsych.data.get();
 
-      // ── Demografija (starost, spol, kuhanje so shranjeni direktno na trial) ──
+      // ── Demografija ──
       const demoTrial = vsiPodatki.filter({ tip: "demografija" }).values()[0];
       const starost   = demoTrial?.starost_vrednost  ?? null;
       const spol      = demoTrial?.spol_vrednost     ?? null;
@@ -716,21 +723,15 @@ if (!skupina) {
       const payload = {
         cas_oddaje: new Date().toISOString(),
         skupina:    skupina,
-
-        // Demografski podatki
         demografija: {
           starost:  starost,
           spol:     spol,
-          kuhanje:  kuhanje     // kuharske izkušnje 1–10
+          kuhanje:  kuhanje
         },
-
-        // Ocene zahtevnosti po vsakem vprašalniku
         zahtevnost_besedil: zahtevnostTriali.map(t => ({
           besedilo: t.besedilo_st,
           ocena:    t.zahtevnost_ocena
         })),
-
-        // Odgovori na vprašalnika
         odgovori: odgovori.map(t => ({
           vprasalnik: t.vprasalnik_st,
           vprasanje:  t.vprasanje_st,
@@ -738,8 +739,6 @@ if (!skupina) {
           pravilno:   t.pravilno,
           rt_ms:      Math.round(t.rt)
         })),
-
-        // Časi branja po odstavkih
         branje_casi: branje.map(t => ({
           odstavek:      t.odstavek_st,
           z_reklamami:   t.z_reklamami,
@@ -749,7 +748,8 @@ if (!skupina) {
         }))
       };
 
-      shraniRezultate(payload);
+      // Počakaj da se podatki res pošljejo preden jsPsych zaključi
+      await shraniRezultate(payload);
     }
   });
 
