@@ -625,10 +625,6 @@ function zakljucekZaslon() {
       </div>`,
     choices: ["Shranite podatke"],
     button_html: `<button class="btn-glavni">%choice%</button>`,
-    on_finish: function() {
-      // Kratka zakasnitev da se fetch zaključi preden se okno zapre
-      setTimeout(() => window.close(), 800);
-    }
   };
 }
 
@@ -750,6 +746,8 @@ if (!skupina) {
 
       // Počakaj da se podatki res pošljejo preden jsPsych zaključi
       await shraniRezultate(payload);
+      // Zapri zaslon
+      setTimeout(() => window.close(), 300);
     }
   });
 
