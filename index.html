@@ -377,6 +377,16 @@ const PIPEDREAM_URL = "https://eo1acanqqi38g21.m.pipedream.net";
 // POMOŽNE FUNKCIJE
 // ============================================================
 
+function safeInt(val) {
+  if (val === undefined || val === null || val === "") return null;
+  return parseInt(val);
+}
+
+function safeRT(rt) {
+  if (rt === undefined || rt === null) return null;
+  return Math.round(rt);
+}
+
 function preberiSkupino() {
   const sk = parseInt(new URLSearchParams(window.location.search).get("skupina"));
   return [1, 2, 3, 4].includes(sk) ? sk : null;
@@ -492,11 +502,11 @@ function demografskiVprasalnik() {
       aktivirajDrsnik("kuhanje", "kuhanje-vrednost");
     },
     on_finish: function(data) {
-      // Zanesljivo shrani demografske vrednosti direktno na data objekt
       const r = preberiOdgovor(data.response);
-      data.starost_vrednost  = r.starost  ?? null;
-      data.spol_vrednost     = r.spol     ?? null;
-      data.kuhanje_vrednost  = r.kuhanje  !== undefined ? parseInt(r.kuhanje) : null;
+      
+      data.starost_vrednost = safeInt(r.starost);
+      data.spol_vrednost    = r.spol ?? null;
+      data.kuhanje_vrednost = safeInt(r.kuhanje);
     }
   };
 }
@@ -561,7 +571,8 @@ function vprasalnikTrials(vprasanja, stevilka) {
     },
     on_finish: function(data) {
       const r = preberiOdgovor(data.response);
-      data.izbrani_odgovor = r.odg !== undefined ? parseInt(r.odg) : null;
+
+      data.izbrani_odgovor = safeInt(r.odg);
       data.pravilno = data.izbrani_odgovor === data.pravilna_moznost;
     }
   }));
@@ -596,7 +607,8 @@ function zahtevnostTrial(stevilkaBesedila) {
     },
     on_finish: function(data) {
       const r = preberiOdgovor(data.response);
-      data.zahtevnost_ocena = r.zahtevnost !== undefined ? parseInt(r.zahtevnost) : null;
+
+      data.zahtevnost_ocena = safeInt(r.zahtevnost);
     }
   };
 }
@@ -701,14 +713,21 @@ if (!skupina) {
       const vsiPodatki = jsPsych.data.get();
 
       // ── Demografija ──
-      const demoTrial = vsiPodatki.filter({ tip: "demografija" }).values()[0];
-      const starost   = demoTrial?.starost_vrednost  ?? null;
+      const demoTrials = vsiPodatki.filter({ tip: "demografija" }).values();
+      const demoTrial = demoTrials.length > 0 ? demoTrials[0] : {};      const starost   = demoTrial?.starost_vrednost  ?? null;
       const spol      = demoTrial?.spol_vrednost     ?? null;
       const kuhanje   = demoTrial?.kuhanje_vrednost  ?? null;
 
       // ── Vprašanja ──
       const odgovori = vsiPodatki.filter({ tip: "vprasanje" }).values();
 
+      odgovori.sort((a, b) => {
+        if (a.vprasalnik !== b.vprasalnik) {
+          return a.vprasalnik - b.vprasalnik;
+        }
+        return a.vprasanje - b.vprasanje;
+      });
+      
       // ── Zahtevnost obeh besedil ──
       const zahtevnostTriali = vsiPodatki.filter({ tip: "zahtevnost" }).values();
 
@@ -733,14 +752,14 @@ if (!skupina) {
           vprasanje:  t.vprasanje_st,
           izbrano:    t.izbrani_odgovor,
           pravilno:   t.pravilno,
-          rt_ms:      Math.round(t.rt)
+          rt_ms:      safeRT(t.rt)
         })),
         branje_casi: branje.map(t => ({
           odstavek:      t.odstavek_st,
           z_reklamami:   t.z_reklamami,
           reklama_levo:  t.reklama_levo,
           reklama_desno: t.reklama_desno,
-          rt_ms:         Math.round(t.rt)
+          rt_ms:         safeRT(t.rt)
         }))
       };
 
