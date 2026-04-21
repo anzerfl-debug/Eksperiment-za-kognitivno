@@ -65,6 +65,100 @@
       margin-bottom: 16px;
     }
 
+    /* ── Soglasje ── */
+    .soglasje-wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 32px 140px;
+      text-align: left;
+    }
+    .soglasje-wrapper h1 {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .soglasje-wrapper ol {
+      padding-left: 20px;
+      margin-bottom: 28px;
+    }
+    .soglasje-wrapper ol li {
+      font-size: 0.97rem;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .soglasje-wrapper .soglasje-podpis {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #333;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-bottom: 28px;
+    }
+    .soglasje-wrapper .soglasje-odobritev {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 32px;
+    }
+
+    .checkbox-vrstica {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 20px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .checkbox-vrstica:has(input:checked) {
+      border-color: var(--accent);
+      background: #f0f7ff;
+    }
+    .checkbox-vrstica input[type="checkbox"] {
+      margin-top: 2px;
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .checkbox-vrstica span {
+      font-size: 0.97rem;
+      line-height: 1.6;
+      color: #222;
+    }
+
+    .btn-soglasje {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgb(50, 110, 241);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 13px 36px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .btn-soglasje:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .btn-soglasje:not(:disabled):hover {
+      background: #02599c;
+    }
+
     /* ── Demografski obrazec ── */
     .demo-form {
       max-width: 520px;
@@ -103,10 +197,7 @@
     .demo-form input:focus,
     .demo-form select:focus { outline: none; border-color: var(--accent); }
 
-    /* ── Drsnik ── */
-    .drsnik-skupina {
-      margin-top: 20px;
-    }
+    .drsnik-skupina { margin-top: 20px; }
     .drsnik-skupina .drsnik-vprasanje {
       font-size: 1rem;
       line-height: 1.6;
@@ -138,7 +229,7 @@
       margin-top: 4px;
     }
 
-    /* ── Samostojni zaslon z drsnikom (za zahtevnost) ── */
+    /* ── Zaslon z drsnikom (zahtevnost) ── */
     .zaslon-drsnik {
       max-width: 560px;
       margin: 0 auto;
@@ -309,10 +400,7 @@
 
 <script>
 
-// ============================================================
-// KONFIGURACIJSKA SEKCIJA — TUKAJ DOPOLNI VSEBINO
-// ============================================================
-
+// KONFIGURACIJSKA SEKCIJA
 const BESEDILO1_ODSTAVKI = [
   "Priprava te zapečenih hrustljavih rženih hlebčkov s slano čokolado in pečenim jabolkom se začne s pripravo osnove, ki združuje robustnost žita in nežnost sadja. Potrebujete 320 gramov grobo mlete ržene moke, ki jo najprej razporedite po pekaču in jo v pečici segrevate 6 minut, da razvije oreškast vonj. Medtem ko se moka greje, olupite dve večji kisli jabolki, ki skupaj tehtata približno 400 gramov. Jabolka narežete na tanke rezine, ki jih prelijete s sokom polovice limone, da ohranijo svetlo barvo. To sadno osnovo boste kasneje uporabili kot vlažilni element, ki bo rženemu testu podaril potrebno sočnost in naravno sladkobo brez uporabe belega sladkorja.",
   "Drugi korak zahteva pripravo čokoladnega veziva, ki jedi podari globino in nepričakovano slan profil. V manjši kozici na nizkem ognju raztopite 80 gramov temne čokolade z vsaj 70-odstotnim deležem kakava. Čokoladi dodate 9 gramov grobe morske soli, ki se ne sme popolnoma raztopiti, saj želimo v končni jedi ohraniti hrustljave kristale. Mešanici nato primešate žlico hladno stiskanega oljčnega olja, ki bo poskrbelo za svetleč videz premaza. To gosto, temno tekočino odstavite z ognja in pustite počivati natanko 4 minute, da se temperatura stabilizira, preden jo začnete vmešavati v suhe sestavine, ki ste jih pripravili v prvem koraku.",
@@ -344,7 +432,6 @@ const REKLAME_DESNO = [
   "reklame/reklama_d5.mp4",
 ];
 
-// pravilna: 0=a, 1=b, 2=c, 3=d
 const VPRASALNIK1 = [
   { vprasanje: "Kaj je potrebno storiti z narezanimi rezinami jabolk takoj po tem, ko jih olupimo?",  moznosti: ["Posuti jih z mletim cimetom, da razvijejo aromo.", "Preliti jih s sokom polovice limone, da ohranijo barvo.", "Položiti jih na pekač k rženi moki za 6 minut.", "Namočiti jih v hladno filtrirano vodo za 20 sekund."], pravilna: 1 },
   { vprasanje: "Koliko časa se mora ržena moka segrevati v pečici, preden dodamo ostale sestavine?",  moznosti: ["10 minute", "5 minut", "8 minut", "6 minut"], pravilna: 3 },
@@ -373,10 +460,7 @@ const VPRASALNIK2 = [
 
 const PIPEDREAM_URL = "https://eo1acanqqi38g21.m.pipedream.net";
 
-// ============================================================
 // POMOŽNE FUNKCIJE
-// ============================================================
-
 function safeInt(val) {
   if (val === undefined || val === null || val === "") return null;
   return parseInt(val);
@@ -431,8 +515,6 @@ function aktivirajDrsnik(id, prikazId) {
   }
 }
 
-// Zanesljivo prebere vrednost iz jsPsychSurveyHtmlForm odgovora
-// (plugin vrne objekt ali JSON niz, odvisno od verzije)
 function preberiOdgovor(dataResponse) {
   if (!dataResponse) return {};
   if (typeof dataResponse === "string") {
@@ -441,10 +523,7 @@ function preberiOdgovor(dataResponse) {
   return dataResponse;
 }
 
-// ============================================================
 // GRADNIKI EKSPERIMENTA
-// ============================================================
-
 function uvodniZaslon() {
   return {
     type: jsPsychHtmlButtonResponse,
@@ -457,6 +536,63 @@ function uvodniZaslon() {
       </div>`,
     choices: ["Naprej"],
     button_html: `<button class="btn-glavni">%choice%</button>`
+  };
+}
+
+function soglasjeZaslon() {
+  return {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="soglasje-wrapper">
+        <h1>OBVEŠČENO SOGLASJE K SODELOVANJU V RAZISKAVI</h1>
+
+        <ol>
+          <li>Vabljeni ste k sodelovanju v raziskavi <strong>VPLIV VIZUALNIH DISTRAKCIJ IN KOGNITIVNE OBREMENITVE OB BRANJU NA POMNJENJE</strong>, ki jo v okviru naloge pri kognitivni psihologiji izvajajo Sebastjan Perovnik, Matjaž Merše, Anže Rifel, Patrik Repar, Timotej Tivadar in Jakob Poles. Raziskava poteka na Oddelku za psihologijo Filozofske fakultete Univerze v Ljubljani, pod vodstvom Jane Verdnik. Namen raziskave je preučiti vpliv vizualnih distrakcij na spomin.</li>
+          <li>Če se odločite za sodelovanje v raziskavi, bo vaša naloga pozorno prebrati 2 besedili in odgovoriti na vprašanja, povezana z besedilom.</li>
+          <li>Izvedba preizkušenj bo trajala približno 10–15 minut. Za udeležbo v raziskavi ne boste prejeli nobenega nadomestila.</li>
+          <li>Udeležba v raziskavi ne prinaša posebnih tveganj.</li>
+          <li>Sodelovanje v raziskavi ne prinaša posebnih koristi z izjemo znanja in izkušenj, ki jih boste pridobili v okviru sodelovanja.</li>
+          <li>Vaše sodelovanje v raziskavi je v celoti prostovoljno in ga lahko kadarkoli prekinete brez posledic.</li>
+          <li>Storili bomo vse, da zaščitimo vašo zasebnost. Zapisi vaših izkušenj in spremljajoči demografski podatki (starost in spol) bodo shranjeni pod raziskovalno šifro. Zbrani podatki bodo v skladu s principi in vodili odprte znanosti lahko objavljeni tudi v javnih repozitorijih in dostopni za dodatne analize, pri čemer podatkov nikakor ne bo možno povezati s posamezniki. Vaša identiteta v nobenem primeru ne bo razkrita.</li>
+          <li>V primeru morebitnih dodatnih vprašanj se lahko obrnete na <a href="mailto:jp23031@student.uni-lj.si">jp23031@student.uni-lj.si</a> ali na Komisijo za etiko Filozofske fakultete (<a href="mailto:vloge.keff@ff.uni-lj.si">vloge.keff@ff.uni-lj.si</a>).</li>
+        </ol>
+
+        <div class="soglasje-podpis">
+          S klikom na spodnje potrditveno polje jamčim, da sem izjavo prebral/-a in da sem imel/-a priložnost za postavitev vprašanj v zvezi z raziskavo. Potrjujem svojo privolitev za udeležbo v opisani raziskavi <strong>»VPLIV VIZUALNIH DISTRAKCIJ IN KOGNITIVNE OBREMENITVE OB BRANJU NA POMNJENJE«</strong> ter dovoljujem uporabo rezultatov v pedagoške in znanstveno-raziskovalne namene.
+        </div>
+
+        <div class="soglasje-odobritev">
+          Raziskavo je odobrila Komisija za etiko Filozofske fakultete Univerze v Ljubljani.
+        </div>
+
+        <label class="checkbox-vrstica">
+          <input type="checkbox" id="soglasje-checkbox">
+          <span>Prebral/-a sem obveščeno soglasje in se strinjam s sodelovanjem v raziskavi.</span>
+        </label>
+      </div>`,
+
+    // Gumb je vedno prisoten — ga blokiramo z on_load
+    choices: ["Naprej"],
+    button_html: `<button class="btn-glavni btn-fiksiran" id="btn-soglasje" disabled style="opacity:0.35;cursor:not-allowed;">Naprej</button>`,
+
+    on_load: function() {
+      const checkbox = document.getElementById("soglasje-checkbox");
+      const gumb = document.getElementById("btn-soglasje");
+
+      checkbox.addEventListener("change", function() {
+        if (checkbox.checked) {
+          gumb.disabled = false;
+          gumb.style.opacity = "1";
+          gumb.style.cursor = "pointer";
+        } else {
+          gumb.disabled = true;
+          gumb.style.opacity = "0.35";
+          gumb.style.cursor = "not-allowed";
+        }
+      });
+    },
+
+    data: { tip: "soglasje" }
   };
 }
 
@@ -503,7 +639,6 @@ function demografskiVprasalnik() {
     },
     on_finish: function(data) {
       const r = preberiOdgovor(data.response);
-      
       data.starost_vrednost = safeInt(r.starost);
       data.spol_vrednost    = r.spol ?? null;
       data.kuhanje_vrednost = safeInt(r.kuhanje);
@@ -571,7 +706,6 @@ function vprasalnikTrials(vprasanja, stevilka) {
     },
     on_finish: function(data) {
       const r = preberiOdgovor(data.response);
-
       data.izbrani_odgovor = safeInt(r.odg);
       data.pravilno = data.izbrani_odgovor === data.pravilna_moznost;
     }
@@ -607,7 +741,6 @@ function zahtevnostTrial(stevilkaBesedila) {
     },
     on_finish: function(data) {
       const r = preberiOdgovor(data.response);
-
       data.zahtevnost_ocena = safeInt(r.zahtevnost);
     }
   };
@@ -633,21 +766,15 @@ function zakljucekZaslon() {
     stimulus: `
       <div class="zakljucek">
         <h1>Hvala za sodelovanje!</h1>
-        <p>Eksperiment je zaključen</p>
+        <p>Eksperiment je zaključen.</p>
       </div>`,
     choices: ["Shranite podatke"],
-    button_html: `<button class="btn-glavni">%choice%</button>`,
+    button_html: `<button class="btn-glavni">%choice%</button>`
   };
 }
 
-// ============================================================
-// SPOREDNI NAČRT
-// ============================================================
-// Skupina 1: B1 (brez) → V1 → zahtevnost B1 → B2 (z reklamami) → V2 → zahtevnost B2
-// Skupina 2: B1 (z)    → V1 → zahtevnost B1 → B2 (brez)        → V2 → zahtevnost B2
-// Skupina 3: B2 (brez) → V2 → zahtevnost B2 → B1 (z reklamami) → V1 → zahtevnost B1
-// Skupina 4: B2 (z)    → V2 → zahtevnost B2 → B1 (brez)        → V1 → zahtevnost B1
 
+// VRSTNI RED
 function sestaviSpored(skupina) {
   switch (skupina) {
     case 1: return [
@@ -689,10 +816,7 @@ function sestaviSpored(skupina) {
   }
 }
 
-// ============================================================
 // ZAGON
-// ============================================================
-
 const skupina = preberiSkupino();
 
 if (!skupina) {
@@ -712,36 +836,23 @@ if (!skupina) {
     on_finish: async function() {
       const vsiPodatki = jsPsych.data.get();
 
-      // ── Demografija ──
       const demoTrials = vsiPodatki.filter({ tip: "demografija" }).values();
-      const demoTrial = demoTrials.length > 0 ? demoTrials[0] : {};      const starost   = demoTrial?.starost_vrednost  ?? null;
-      const spol      = demoTrial?.spol_vrednost     ?? null;
-      const kuhanje   = demoTrial?.kuhanje_vrednost  ?? null;
+      const demoTrial  = demoTrials.length > 0 ? demoTrials[0] : {};
+      const starost    = demoTrial?.starost_vrednost ?? null;
+      const spol       = demoTrial?.spol_vrednost    ?? null;
+      const kuhanje    = demoTrial?.kuhanje_vrednost ?? null;
 
-      // ── Vprašanja ──
-      const odgovori = vsiPodatki.filter({ tip: "vprasanje" }).values();
-
-      odgovori.sort((a, b) => {
-        if (a.vprasalnik !== b.vprasalnik) {
-          return a.vprasalnik - b.vprasalnik;
-        }
-        return a.vprasanje - b.vprasanje;
-      });
-      
-      // ── Zahtevnost obeh besedil ──
+      const odgovori         = vsiPodatki.filter({ tip: "vprasanje" }).values();
       const zahtevnostTriali = vsiPodatki.filter({ tip: "zahtevnost" }).values();
+      const branje           = vsiPodatki.filter({ tip: "branje" }).values();
 
-      // ── Časi branja ──
-      const branje = vsiPodatki.filter({ tip: "branje" }).values();
-
-      // ── Sestavi JSON ──
       const payload = {
         cas_oddaje: new Date().toISOString(),
         skupina:    skupina,
         demografija: {
-          starost:  starost,
-          spol:     spol,
-          kuhanje:  kuhanje
+          starost: starost,
+          spol:    spol,
+          kuhanje: kuhanje
         },
         zahtevnost_besedil: zahtevnostTriali.map(t => ({
           besedilo: t.besedilo_st,
@@ -763,15 +874,14 @@ if (!skupina) {
         }))
       };
 
-      // Počakaj da se podatki res pošljejo preden jsPsych zaključi
       await shraniRezultate(payload);
-      // Zapri zaslon
       setTimeout(() => window.close(), 300);
     }
   });
 
   const timeline = [
     uvodniZaslon(),
+    soglasjeZaslon(),
     demografskiVprasalnik(),
     ...sestaviSpored(skupina),
     zakljucekZaslon()
