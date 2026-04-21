@@ -104,7 +104,6 @@
       font-style: italic;
       margin-bottom: 32px;
     }
-
     .checkbox-vrstica {
       display: flex;
       align-items: flex-start;
@@ -132,31 +131,6 @@
       font-size: 0.97rem;
       line-height: 1.6;
       color: #222;
-    }
-
-    .btn-soglasje {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgb(50, 110, 241);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 13px 36px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: background 0.15s, opacity 0.15s;
-    }
-    .btn-soglasje:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-    .btn-soglasje:not(:disabled):hover {
-      background: #02599c;
     }
 
     /* ── Demografski obrazec ── */
@@ -384,6 +358,33 @@
       transform: translateX(-50%);
     }
 
+    /* Gumb za soglasje — upravlja JS */
+    #btn-soglasje {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgb(50, 110, 241);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 13px 36px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: not-allowed;
+      opacity: 0.35;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    #btn-soglasje.aktiven {
+      opacity: 1;
+      cursor: pointer;
+    }
+    #btn-soglasje.aktiven:hover {
+      background: #02599c;
+    }
+
     /* ── Zaključek ── */
     .zakljucek {
       max-width: 600px;
@@ -540,9 +541,11 @@ function uvodniZaslon() {
 }
 
 function soglasjeZaslon() {
+  // Uporablja jsPsychSurveyHtmlForm z required checkboxom —
+  // plugin sam poskrbi da gumb ne deluje dokler checkbox ni označen
   return {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `
+    type: jsPsychSurveyHtmlForm,
+    html: `
       <div class="soglasje-wrapper">
         <h1>OBVEŠČENO SOGLASJE K SODELOVANJU V RAZISKAVI</h1>
 
@@ -566,33 +569,35 @@ function soglasjeZaslon() {
         </div>
 
         <label class="checkbox-vrstica">
-          <input type="checkbox" id="soglasje-checkbox">
+          <input type="checkbox" name="soglasje" value="da" required>
           <span>Prebral/-a sem obveščeno soglasje in se strinjam s sodelovanjem v raziskavi.</span>
         </label>
       </div>`,
-
-    // Gumb je vedno prisoten — ga blokiramo z on_load
-    choices: ["Naprej"],
-    button_html: `<button class="btn-glavni btn-fiksiran" id="btn-soglasje" disabled style="opacity:0.35;cursor:not-allowed;">Naprej</button>`,
-
+    button_label: "Naprej",
+    button_html: `<button class="btn-glavni btn-fiksiran" id="btn-soglasje">Naprej</button>`,
+    data: { tip: "soglasje" },
     on_load: function() {
-      const checkbox = document.getElementById("soglasje-checkbox");
+      // Gumb je privzeto neaktiven
       const gumb = document.getElementById("btn-soglasje");
+      gumb.disabled = true;
+      gumb.style.opacity = "0.35";
+      gumb.style.cursor = "not-allowed";
 
-      checkbox.addEventListener("change", function() {
-        if (checkbox.checked) {
-          gumb.disabled = false;
-          gumb.style.opacity = "1";
-          gumb.style.cursor = "pointer";
-        } else {
-          gumb.disabled = true;
-          gumb.style.opacity = "0.35";
-          gumb.style.cursor = "not-allowed";
+      // Postane aktiven šele ob kliku na checkbox
+      document.addEventListener("change", function(e) {
+        if (e.target.name === "soglasje") {
+          if (e.target.checked) {
+            gumb.disabled = false;
+            gumb.style.opacity = "1";
+            gumb.style.cursor = "pointer";
+          } else {
+            gumb.disabled = true;
+            gumb.style.opacity = "0.35";
+            gumb.style.cursor = "not-allowed";
+          }
         }
       });
-    },
-
-    data: { tip: "soglasje" }
+    }
   };
 }
 
@@ -772,7 +777,6 @@ function zakljucekZaslon() {
     button_html: `<button class="btn-glavni">%choice%</button>`
   };
 }
-
 
 // VRSTNI RED
 function sestaviSpored(skupina) {
