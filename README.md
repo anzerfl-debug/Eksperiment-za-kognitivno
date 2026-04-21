@@ -1,3 +1,4 @@
 # Eksperiment-za-kognitivno
-Vpliv reklam na bralno razumevanje
+Vpliv reklam na bralno razumevanje.
+
 Tukaj naj bi bila natnčnejša navodila, ampak ojoj ...
