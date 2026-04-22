@@ -636,12 +636,10 @@ function pripravniZaslon() {
     type: jsPsychHtmlButtonResponse,
     stimulus: `
       <div class="zaslon-uvod">
-        <h1>Priprava na eksperiment</h1>
-        <p>Sedaj se bo začel eksperiment. Prebrali boste besedilo in odgovorili na vprašanja o vsebini.</p>
-        <p>Besedilo napredujete s pritiskom na <strong>preslednico</strong> ali <strong>puščico desno (→)</strong>. Med branjem se ne morete vračati na prejšnje odstavke.</p>
+        <p>Sedaj se bo začel eksperiment.</p>
         <p>Ko ste pripravljeni, pritisnite gumb spodaj.</p>
       </div>`,
-    choices: ["Začnem eksperiment"],
+    choices: ["Naprej"],
     button_html: `<button class="btn-glavni">%choice%</button>`
   };
 }
