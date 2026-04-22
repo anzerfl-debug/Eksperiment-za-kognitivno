@@ -69,7 +69,7 @@
     .soglasje-wrapper {
       max-width: 760px;
       margin: 0 auto;
-      padding: 48px 32px 140px;
+      padding: 48px 32px 180px;
       text-align: left;
     }
     .soglasje-wrapper h1 {
@@ -345,38 +345,12 @@
     .jspsych-btn:hover,
     .btn-glavni:hover { background: #02599c; }
 
+    /* Gumb za soglasje — dvignjen od roba */
     .btn-fiksiran {
       position: fixed;
-      bottom: 30px;
+      bottom: 60px;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    /* Gumb za soglasje — upravlja JS */
-    #btn-soglasje {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgb(50, 110, 241);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 13px 36px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      cursor: not-allowed;
-      opacity: 0.35;
-      transition: background 0.15s, opacity 0.15s;
-    }
-    #btn-soglasje.aktiven {
-      opacity: 1;
-      cursor: pointer;
-    }
-    #btn-soglasje.aktiven:hover {
-      background: #02599c;
     }
 
     /* ── Zaključek ── */
@@ -484,6 +458,21 @@ async function shraniRezultate(podatki) {
   }
 }
 
+// Predhodno naloži vse videoposnetke reklam v ozadju
+function prelodiReklame() {
+  const vseReklame = [...REKLAME_LEVO, ...REKLAME_DESNO];
+  vseReklame.forEach(pot => {
+    const video = document.createElement("video");
+    video.src = pot;
+    video.preload = "auto";
+    video.muted = true;
+    video.style.display = "none";
+    document.body.appendChild(video);
+    // Sproži nalaganje
+    video.load();
+  });
+}
+
 function reklamaHTML(stran, odstavekIndex) {
   const reklame = stran === "levo" ? REKLAME_LEVO : REKLAME_DESNO;
   if (!reklame || reklame.length === 0) return "<div></div>";
@@ -530,13 +519,13 @@ function uvodniZaslon() {
         <p>Eksperiment traja približno <strong>10–15 minut</strong>. Ko ste pripravljeni, pritisnite gumb spodaj.</p>
       </div>`,
     choices: ["Naprej"],
-    button_html: `<button class="btn-glavni">%choice%</button>`
+    button_html: `<button class="btn-glavni">%choice%</button>`,
+    // Prične nalaganje reklam takoj ko udeleženec vidi prvi zaslon
+    on_load: function() { prelodiReklame(); }
   };
 }
 
 function soglasjeZaslon() {
-  // Uporablja jsPsychSurveyHtmlForm z required checkboxom —
-  // plugin sam poskrbi da gumb ne deluje dokler checkbox ni označen
   return {
     type: jsPsychSurveyHtmlForm,
     html: `
@@ -567,13 +556,11 @@ function soglasjeZaslon() {
     button_html: `<button class="btn-glavni btn-fiksiran" id="btn-soglasje">Naprej</button>`,
     data: { tip: "soglasje" },
     on_load: function() {
-      // Gumb je privzeto neaktiven
       const gumb = document.getElementById("btn-soglasje");
       gumb.disabled = true;
       gumb.style.opacity = "0.35";
       gumb.style.cursor = "not-allowed";
 
-      // Postane aktiven šele ob kliku na checkbox
       document.addEventListener("change", function(e) {
         if (e.target.name === "soglasje") {
           if (e.target.checked) {
@@ -638,6 +625,22 @@ function demografskiVprasalnik() {
       data.spol_vrednost    = r.spol ?? null;
       data.kuhanje_vrednost = safeInt(r.kuhanje);
     }
+  };
+}
+
+// Pripravni zaslon med demografijo in eksperimentom
+function pripravniZaslon() {
+  return {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <div class="zaslon-uvod">
+        <h1>Priprava na eksperiment</h1>
+        <p>Sedaj se bo začel eksperiment. Prebrali boste besedilo in odgovorili na vprašanja o vsebini.</p>
+        <p>Besedilo napredujete s pritiskom na <strong>preslednico</strong> ali <strong>puščico desno (→)</strong>. Med branjem se ne morete vračati na prejšnje odstavke.</p>
+        <p>Ko ste pripravljeni, pritisnite gumb spodaj.</p>
+      </div>`,
+    choices: ["Začnem eksperiment"],
+    button_html: `<button class="btn-glavni">%choice%</button>`
   };
 }
 
@@ -877,6 +880,7 @@ if (!skupina) {
     uvodniZaslon(),
     soglasjeZaslon(),
     demografskiVprasalnik(),
+    pripravniZaslon(),
     ...sestaviSpored(skupina),
     zakljucekZaslon()
   ];
